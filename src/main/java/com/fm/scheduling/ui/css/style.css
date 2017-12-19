@@ -1,0 +1,48 @@
+
+.text-field {
+    -fx-pref-width: 120px;
+    -fx-pref-height: 40px;
+}
+
+.button{
+    -fx-pref-width: 100px;
+    -fx-pref-height: 40px;
+    -fx-: 20px 20px 20px 20px;
+    -fx-font-weight: 700;
+}
+
+.label{
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-marging: 0px 0px 0px 15px;
+}
+
+.section-label{
+    -fx-text-fill: rgb(0, 123, 160);
+    -fx-padding: 0 0 0 10;
+    -fx-font-size: 18px;
+}
+
+.main-title{
+    -fx-font-size: 25px;
+    -fx-text-fill: rgb(5, 7, 143);
+}
+
+.maxmin-txt{
+    -fx-pref-width: 100px;
+    -fx-max-width: 100px;
+}
+
+.table-view .table-cell{
+    -fx-pref-height: 40px;
+    -fx-font-size: 16px;
+    -fx-padding: 7px;
+
+}
+
+.grid {
+    -fx-border-color: #c0c0c0;
+    -fx-border-width: 1px;
+    -fx-padding: 15;
+    -fx-spacing: 10;
+}
