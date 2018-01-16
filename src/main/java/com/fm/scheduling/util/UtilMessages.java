@@ -1,6 +1,7 @@
 package com.fm.scheduling.util;
 
 import com.fm.scheduling.exception.SchedulingException;
+import com.fm.scheduling.service.SchedulingService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -8,27 +9,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**
- * Created by francisco on 5/25/17.
- */
 public class UtilMessages {
 
     private final static String PROPERTY_FILE = "message";
-
-    private enum LocalesSupported{
-        en(new Locale("en")),
-        es(new Locale("es"));
-
-        LocalesSupported(Locale locale){
-            this.locale = locale;
-        }
-
-        private Locale locale;
-
-        public Locale getLocale() {
-            return locale;
-        }
-    }
 
     private final static String MESSAGE_STR_PREFIX = "exception.";
 
@@ -36,12 +19,18 @@ public class UtilMessages {
 
     private ResourceBundle resourceBundle;
 
-    private UtilMessages(String locale){
-        resourceBundle = ResourceBundle.getBundle(PROPERTY_FILE, LocalesSupported.valueOf(locale).getLocale());
+    SchedulingService schedulingService = SchedulingService.getInstance();
+
+    private UtilMessages(){
+        resourceBundle = ResourceBundle.getBundle(PROPERTY_FILE, SchedulingService.LocalesSupported.getLocaleSupported(Locale.getDefault()).getLocale());
     }
 
-    public static synchronized UtilMessages getInstance(String locale){
-        if(instance == null) instance = new UtilMessages(locale);
+    public static synchronized void destroyInstance(){
+        instance = null;
+    }
+
+    public static synchronized UtilMessages getInstance(){
+        if(instance == null) instance = new UtilMessages();
 
         return instance;
     }

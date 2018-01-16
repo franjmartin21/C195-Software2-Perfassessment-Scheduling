@@ -1,11 +1,20 @@
 package com.fm.scheduling.dao;
 
 import com.fm.scheduling.domain.Country;
+import com.fm.scheduling.domain.Customer;
 import com.fm.scheduling.domain.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CountryDao extends BaseDao<Country> {
+
+    private static final String GET_LIST_QUERY = " " +
+            " SELECT    countryId," +
+            "           country," +
+            COMMON_COLUMS_QUERY +
+            " FROM      Country";
 
     private static final String GET_BY_ID_QUERY =" " +
                                     " SELECT    countryId," +
@@ -26,8 +35,17 @@ public class CountryDao extends BaseDao<Country> {
     private static final String DELETE_QUERY = "" +
             "DELETE FROM Country WHERE countryId = ?";
 
-    public CountryDao() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public CountryDao() {
         super(Country.class);
+    }
+
+    public List<Country> getList() throws SQLException{
+        super.createConnectionDb();
+        PreparedStatement ps = connection.prepareStatement(GET_LIST_QUERY);
+        ResultSet rs = ps.executeQuery();
+        List<Country> countryList = mapResultSetList(rs);
+        super.closeConnectionDb();
+        return countryList;
     }
 
     @Override
@@ -85,6 +103,19 @@ public class CountryDao extends BaseDao<Country> {
         return returnCode;
     }
 
+    public List<Country> mapResultSetList(ResultSet rs) throws SQLException{
+        if(rs == null) return null;
+
+        List<Country> countryList = new ArrayList<Country>();
+        Country country = null;
+        while (rs.next()) {
+            country = super.mapResultSet(rs);
+            country.setCountryId(rs.getInt("countryId"));
+            country.setCountry(rs.getString("country"));
+            countryList.add(country);
+        }
+        return countryList;
+    }
 
     @Override
     protected Country mapResultSet(ResultSet rs) throws SQLException{
@@ -98,5 +129,4 @@ public class CountryDao extends BaseDao<Country> {
         }
         return country;
     }
-
 }

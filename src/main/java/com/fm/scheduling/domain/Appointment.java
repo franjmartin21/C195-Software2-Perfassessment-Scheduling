@@ -4,6 +4,48 @@ import java.time.LocalDateTime;
 
 public class Appointment extends BaseRecord<Appointment>{
 
+    public final static int MAX_HOURS_LENGHT_APPOINTMENT = 3;
+
+    public enum DescriptionEnum {
+        INITIAL_CONSULTATION("Initial Consultation"),
+        UPDATE_MEETING("Update meeting"),
+        ENDING_CONTRACT("Ending contract");
+
+        private String labelTxt;
+
+        DescriptionEnum(String labelTxt){
+            this.labelTxt = labelTxt;
+        }
+
+        public String getLabelTxt() {
+            return labelTxt;
+        }
+    }
+
+    public enum LocationEnum{
+        PHOENIX("Phoenix - Arizona"),
+        NEW_YORK("New York - New York"),
+        LONDON("London - England");
+
+        private String labelTxt;
+
+        LocationEnum(String labelTxt){
+            this.labelTxt = labelTxt;
+        }
+
+        public String getLabelTxt() {
+            return labelTxt;
+        }
+
+        public static LocationEnum getLocationByLabel(String label){
+            for(LocationEnum locationEnum: LocationEnum.values()){
+                if(locationEnum.getLabelTxt().equals(label)) return locationEnum;
+            }
+            return null;
+        }
+    }
+
+
     private int appointmentId;
 
     private int customerId;
@@ -12,9 +54,9 @@ public class Appointment extends BaseRecord<Appointment>{
 
     private String title;
 
-    private String description;
+    private DescriptionEnum description;
 
-    private String location;
+    private LocationEnum location;
 
     private String contact;
 
@@ -48,19 +90,19 @@ public class Appointment extends BaseRecord<Appointment>{
         this.title = title;
     }
 
-    public String getDescription() {
+    public DescriptionEnum getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(DescriptionEnum description) {
         this.description = description;
     }
 
-    public String getLocation() {
+    public LocationEnum getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(LocationEnum location) {
         this.location = location;
     }
 
@@ -98,6 +140,10 @@ public class Appointment extends BaseRecord<Appointment>{
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public String getCustomerName(){
+        return customer != null? customer.getCustomerName(): null;
     }
 
     public void setCustomer(Customer customer) {

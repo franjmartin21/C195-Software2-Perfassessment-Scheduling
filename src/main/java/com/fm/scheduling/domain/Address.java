@@ -52,6 +52,14 @@ public class Address extends BaseRecord {
         return city;
     }
 
+    public String getCityName(){
+        return city != null? city.getCity(): null;
+    }
+
+    public String getCountryName(){
+        return city != null? city.getCountryName(): null;
+    }
+
     public void setCity(City city) {
         this.city = city;
         this.cityId = city.getCityId();

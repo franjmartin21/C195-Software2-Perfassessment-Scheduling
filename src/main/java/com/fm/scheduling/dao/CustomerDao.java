@@ -4,10 +4,21 @@ import com.fm.scheduling.domain.Customer;
 import com.fm.scheduling.domain.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomerDao extends BaseDao<Customer> {
 
-    private static final String GET_BY_ID_QUERY =" SELECT    customerId," +
+    private static final String GET_LIST_QUERY = " " +
+            " SELECT    customerId," +
+            "           customerName," +
+            "           addressId," +
+            "           active," +
+            COMMON_COLUMS_QUERY +
+            " FROM      Customer";
+
+    private static final String GET_BY_ID_QUERY =" " +
+                                    " SELECT    customerId," +
                                     "           customerName," +
                                     "           addressId," +
                                     "           active," +
@@ -29,8 +40,17 @@ public class CustomerDao extends BaseDao<Customer> {
     private static final String DELETE_QUERY = "" +
             "DELETE FROM Customer WHERE customerId = ?";
 
-    public CustomerDao() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public CustomerDao() {
         super(Customer.class);
+    }
+
+    public List<Customer> getList() throws SQLException{
+        super.createConnectionDb();
+        PreparedStatement ps = connection.prepareStatement(GET_LIST_QUERY);
+        ResultSet rs = ps.executeQuery();
+        List<Customer> customerList = mapResultSetList(rs);
+        super.closeConnectionDb();
+        return customerList;
     }
 
     @Override
@@ -39,9 +59,9 @@ public class CustomerDao extends BaseDao<Customer> {
         PreparedStatement ps = connection.prepareStatement(GET_BY_ID_QUERY);
         ps.setInt(1, i);
         ResultSet rs = ps.executeQuery();
-        Customer customer = mapResultSet(rs);
+        List<Customer> customerList = mapResultSetList(rs);
         super.closeConnectionDb();
-        return customer;
+        return customerList.isEmpty()? null: customerList.get(0);
     }
 
     @Override
@@ -93,10 +113,10 @@ public class CustomerDao extends BaseDao<Customer> {
     }
 
 
-    @Override
-    protected Customer mapResultSet(ResultSet rs) throws SQLException{
+    public List<Customer> mapResultSetList(ResultSet rs) throws SQLException{
         if(rs == null) return null;
 
+        List<Customer> customerList = new ArrayList<Customer>();
         Customer customer = null;
         while (rs.next()) {
             customer = super.mapResultSet(rs);
@@ -104,8 +124,9 @@ public class CustomerDao extends BaseDao<Customer> {
             customer.setCustomerName(rs.getString("customerName"));
             customer.setAddressId(rs.getInt("addressId"));
             customer.setActive(rs.getBoolean("active"));
+            customerList.add(customer);
         }
-        return customer;
+        return customerList;
     }
 
 }

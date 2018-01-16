@@ -2,14 +2,17 @@ package com.fm.scheduling.dao;
 
 import com.fm.scheduling.domain.BaseRecord;
 import com.fm.scheduling.domain.User;
+import com.fm.scheduling.util.UtilMessages;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 public abstract class BaseDao<E extends BaseRecord> {
 
+    private static final String CONFIG_FILE = "config";
 
     private String url;
 
@@ -31,18 +34,22 @@ public abstract class BaseDao<E extends BaseRecord> {
     protected static final String COMMON_COLUMN_WILDCARDS = "?,?,?,?";
 
     protected static final String COMMON_COLUMNS_UPDATE = "" +
-            //"createdBy = ?," +
-            //"createDate = ?," +
             "lastUpdate = ?," +
             "lastUpdateBy = ? ";
 
 
-    public BaseDao(Class clazz) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        this.url = "jdbc:mysql://localhost:3306/";
-        this.dbName = "scheduling";
-        this.user = "scheduling";
-        this.password = "scheduling";
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
+    public BaseDao(Class clazz){
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(CONFIG_FILE);
+
+        this.url = resourceBundle.getString("mysql.url");
+        this.dbName = resourceBundle.getString("mysql.dbName");
+        this.user = resourceBundle.getString("mysql.user");
+        this.password = resourceBundle.getString("mysql.password");
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.clazz = clazz;
     }
 

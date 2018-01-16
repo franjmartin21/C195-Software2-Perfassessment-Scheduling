@@ -34,7 +34,7 @@ public class AddressDao extends BaseDao<Address> {
     private static final String DELETE_QUERY = "" +
             "DELETE FROM Address WHERE addressId = ?";
 
-    public AddressDao() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public AddressDao(){
         super(Address.class);
     }
 
@@ -109,6 +109,7 @@ public class AddressDao extends BaseDao<Address> {
         Address address = null;
         while (rs.next()) {
             address = super.mapResultSet(rs);
+            address.setAddressId(rs.getInt("addressId"));
             address.setAddress(rs.getString("address"));
             address.setAddress2(rs.getString("address2"));
             address.setCityId(rs.getInt("cityId"));

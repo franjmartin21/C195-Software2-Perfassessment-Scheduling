@@ -89,8 +89,8 @@ public class AppointmentDaoTest extends BaseDaoTest{
         appointment.setEnd(LocalDateTime.of(2017, 9, 9, 10, 0));
         appointment.setUrl("www.google.com");
         appointment.setContact("Julio");
-        appointment.setLocation("Madrid");
-        appointment.setDescription("Lo que sea");
+        //appointment.setLocation("Madrid");
+        //appointment.setDescription("Lo que sea");
         appointment.setTitle("Appointment 1");
         appointment.setCustomer(customer);
         int appointmentId = appointmentDao.insert(appointment, userCreator);
@@ -106,8 +106,8 @@ public class AppointmentDaoTest extends BaseDaoTest{
         appointment.setEnd(LocalDateTime.of(2017, 9, 9, 10, 0));
         appointment.setUrl("www.google.com");
         appointment.setContact("Julio");
-        appointment.setLocation("Madrid");
-        appointment.setDescription("Lo que sea");
+        //appointment.setLocation("Madrid");
+        //appointment.setDescription("Lo que sea");
         appointment.setTitle("Appointment 1");
         appointment.setCustomer(customer);
         int appointmentId = appointmentDao.insert(appointment, userCreator);
@@ -115,9 +115,9 @@ public class AppointmentDaoTest extends BaseDaoTest{
 
         appointment1.setCustomer(customer2);
         appointment1.setTitle("Appointment 2");
-        appointment1.setDescription("Lo que sea 2");
+        //appointment1.setDescription("Lo que sea 2");
         appointment1.setContact("Pepe");
-        appointment1.setLocation("Burgos");
+        //appointment1.setLocation("Burgos");
         appointment1.setUrl("www.yahoo.com");
         appointment.setStart(LocalDateTime.of(2017,9,10, 9,45));
         appointment.setEnd(LocalDateTime.of(2017, 9, 10, 10, 0));
@@ -134,8 +134,8 @@ public class AppointmentDaoTest extends BaseDaoTest{
         appointment.setEnd(LocalDateTime.of(2017, 9, 9, 10, 0));
         appointment.setUrl("www.google.com");
         appointment.setContact("Julio");
-        appointment.setLocation("Madrid");
-        appointment.setDescription("Lo que sea");
+        //appointment.setLocation("Madrid");
+        //appointment.setDescription("Lo que sea");
         appointment.setTitle("Appointment 1");
         appointment.setCustomer(customer);
         int appointmentId = appointmentDao.insert(appointment, userCreator);

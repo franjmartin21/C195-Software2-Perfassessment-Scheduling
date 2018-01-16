@@ -3,8 +3,18 @@ package com.fm.scheduling.dao;
 import com.fm.scheduling.domain.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao extends BaseDao<User> {
+
+    private static final String GET_LIST_QUERY =" " +
+            "SELECT     userId," +
+            "           userName," +
+            "           password," +
+            "           active," +
+            COMMON_COLUMS_QUERY +
+            " FROM      User";
 
     private static final String GET_BY_ID_QUERY =" " +
             "SELECT     userId," +
@@ -14,6 +24,16 @@ public class UserDao extends BaseDao<User> {
                         COMMON_COLUMS_QUERY +
             " FROM      User" +
             " WHERE     userId = ?";
+
+    private static final String GET_BY_NAME_QUERY =" " +
+            "SELECT     userId," +
+            "           userName," +
+            "           password," +
+            "           active," +
+            COMMON_COLUMS_QUERY +
+            " FROM      User" +
+            " WHERE     userName = ?";
+
 
     private static final String INSERT_QUERY = "" +
             "INSERT INTO User (userName, password, active," + COMMON_COLUMS_QUERY + ")" +
@@ -31,8 +51,17 @@ public class UserDao extends BaseDao<User> {
             "DELETE FROM User WHERE userId = ?";
 
 
-    public UserDao() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public UserDao(){
         super(User.class);
+    }
+
+    public List<User> getList() throws SQLException{
+        super.createConnectionDb();
+        PreparedStatement ps = connection.prepareStatement(GET_LIST_QUERY);
+        ResultSet rs = ps.executeQuery();
+        List<User> userList = mapResultSetList(rs);
+        super.closeConnectionDb();
+        return userList;
     }
 
     @Override
@@ -40,6 +69,16 @@ public class UserDao extends BaseDao<User> {
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(GET_BY_ID_QUERY);
         ps.setInt(1, i);
+        ResultSet rs = ps.executeQuery();
+        User user = mapResultSet(rs);
+        super.closeConnectionDb();
+        return user;
+    }
+
+    public User getByName(String name) throws SQLException{
+        super.createConnectionDb();
+        PreparedStatement ps = connection.prepareStatement(GET_BY_NAME_QUERY);
+        ps.setString(1, name);
         ResultSet rs = ps.executeQuery();
         User user = mapResultSet(rs);
         super.closeConnectionDb();
@@ -94,6 +133,22 @@ public class UserDao extends BaseDao<User> {
         returnCode = ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
+    }
+
+    public List<User> mapResultSetList(ResultSet rs) throws SQLException{
+        if(rs == null) return null;
+
+        List<User> userList = new ArrayList<>();
+        User user = null;
+        while (rs.next()) {
+            user = super.mapResultSet(rs);
+            user.setUserId(rs.getInt("userId"));
+            user.setUserName(rs.getString("userName"));
+            user.setPassword(rs.getString("password"));
+            user.setActive(rs.getBoolean("active"));
+            userList.add(user);
+        }
+        return userList;
     }
 
     @Override

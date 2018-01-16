@@ -2,13 +2,12 @@ package com.fm.scheduling.ui.util;
 
 import com.fm.scheduling.ui.login.LoginController;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
@@ -27,7 +26,15 @@ public class UtilUI {
     private final String CSS_PATH = "../css/style.css";
 
     public enum UIEnum {
-        INVENTORY_UI("login.fxml", "Login", 1700, 700, true);
+        LOGIN_UI("../fxml/login.fxml", "Login", 1700, 700, true),
+        CONTROL_PANEL_UI("../fxml/control_panel.fxml", "Control Panel", 600, 400, true),
+        CUSTOMER_TABLE_UI("../fxml/customer_table.fxml", "Customer Table", 980, 600, true),
+        CUSTOMER_EDIT_UI("../fxml/customer_detail.fxml", "Edit Customer", 550, 600, true),
+        CUSTOMER_ADD_UI("../fxml/customer_detail.fxml", "Add Customer", 550, 600, true),
+        APPOINTMENTS_TABLE_UI("../fxml/appointments_table.fxml", "Appointments", 1200, 800, true),
+        APPOINTMENTS_EDIT_UI("../fxml/appointments_detail.fxml", "Edit Appointment", 700, 600, true),
+        APPOINTMENTS_ADD_UI("../fxml/appointments_detail.fxml", "Add Appointment", 700, 600, true),
+        REPORTS_UI("../fxml/reports.fxml", "Reports", 1200, 800, false);
 
         private String uiPath;
         private String title;
@@ -70,7 +77,7 @@ public class UtilUI {
         return instance;
     }
 
-    public void openUI(ActionEvent actionEvent, UIEnum uiEnum) throws IOException {
+    public void openUI(ActionEvent actionEvent, UIEnum uiEnum, Scene sceneToClose) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(uiEnum.getUiPath()));
         Parent root = loader.load();
         Stage stage = new Stage();
@@ -80,7 +87,15 @@ public class UtilUI {
         stage.setScene(scene);
         stage.show();
         // Hide this current window (if this is what you want)
-        if(uiEnum.isHideParent()) ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        if(uiEnum.isHideParent()) sceneToClose.getWindow().hide();
+    }
+
+    public void openUI(ActionEvent actionEvent, UIEnum uiEnum) throws IOException {
+        openUI(actionEvent, uiEnum, ((Node)(actionEvent.getSource())).getScene());
+    }
+
+    public void closeUI(ActionEvent actionEvent){
+        ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
     }
 
     public void openWarningDialog(String content){
@@ -107,9 +122,13 @@ public class UtilUI {
     }
 
     public void openInformationDialog(String content){
+        openInformationDialog("Information", content);
+    }
+
+    public void openInformationDialog(String header, String content){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information Dialog");
-        alert.setHeaderText("Information");
+        alert.setHeaderText(header);
         alert.setContentText(content);
         alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinHeight(Region.USE_PREF_SIZE));
         alert.showAndWait();
@@ -124,6 +143,4 @@ public class UtilUI {
         Optional<ButtonType> result = alert.showAndWait();
         return result.get() == ButtonType.OK;
     }
-
-
 }

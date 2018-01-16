@@ -34,6 +34,10 @@ public class City extends BaseRecord {
         this.countryId = countryId;
     }
 
+    public String getCountryName(){
+        return country != null? country.getCountry(): null;
+    }
+
     public Country getCountry() {
         return country;
     }

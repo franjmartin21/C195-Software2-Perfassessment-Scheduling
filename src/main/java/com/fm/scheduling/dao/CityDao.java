@@ -1,11 +1,22 @@
 package com.fm.scheduling.dao;
 
 import com.fm.scheduling.domain.City;
+import com.fm.scheduling.domain.Country;
 import com.fm.scheduling.domain.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CityDao extends BaseDao<City> {
+
+    private static final String GET_LIST_BY_COUNTRY_ID_QUERY = " " +
+                                    " SELECT    cityId, " +
+                                    "           city, " +
+                                    "           countryId," +
+                                                COMMON_COLUMS_QUERY +
+                                    " FROM      City" +
+                                    " WHERE     countryId = ?";
 
     private static final String GET_BY_ID_QUERY =" " +
                                     " SELECT    cityId," +
@@ -28,8 +39,18 @@ public class CityDao extends BaseDao<City> {
     private static final String DELETE_QUERY = "" +
             "DELETE FROM City WHERE cityId = ?";
 
-    public CityDao() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public CityDao() {
         super(City.class);
+    }
+
+    public List<City> getListByCountryId(int countryId) throws SQLException{
+        super.createConnectionDb();
+        PreparedStatement ps = connection.prepareStatement(GET_LIST_BY_COUNTRY_ID_QUERY);
+        ps.setInt(1, countryId);
+        ResultSet rs = ps.executeQuery();
+        List<City> cityList = mapResultSetList(rs);
+        super.closeConnectionDb();
+        return cityList;
     }
 
     @Override
@@ -89,6 +110,20 @@ public class CityDao extends BaseDao<City> {
         return returnCode;
     }
 
+    public List<City> mapResultSetList(ResultSet rs) throws SQLException{
+        if(rs == null) return null;
+
+        List<City> cityList = new ArrayList<City>();
+        City city = null;
+        while (rs.next()) {
+            city = super.mapResultSet(rs);
+            city.setCityId(rs.getInt("cityId"));
+            city.setCity(rs.getString("city"));
+            city.setCountryId(rs.getInt("countryId"));
+            cityList.add(city);
+        }
+        return cityList;
+    }
 
     @Override
     protected City mapResultSet(ResultSet rs) throws SQLException{

@@ -41,6 +41,18 @@ public class Customer extends BaseRecord<Customer>{
         return address;
     }
 
+    public String getAddressName(){
+        return address != null ? address.getAddress() + " " + address.getAddress2(): null;
+    }
+
+    public String getCityName(){
+        return address != null? address.getCityName(): null;
+    }
+
+    public String getCountryName(){
+        return address != null? address.getCountryName(): null;
+    }
+
     public void setAddress(Address address) {
         this.address = address;
         this.addressId = address.getAddressId();
