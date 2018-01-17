@@ -4,6 +4,7 @@ import com.fm.scheduling.domain.Appointment;
 import com.fm.scheduling.exception.SchedulingException;
 import com.fm.scheduling.service.SchedulingService;
 import com.fm.scheduling.ui.util.UtilUI;
+import com.fm.scheduling.util.UtilLog;
 import com.fm.scheduling.util.UtilMessages;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -35,6 +36,8 @@ public class LoginController extends Application{
 
     private UtilUI utilUI = UtilUI.getInstance();
 
+    private UtilLog utilLog = UtilLog.getInstance();
+
     @FXML
     private TextField usernameTxt;
 
@@ -64,6 +67,7 @@ public class LoginController extends Application{
         }
         if(loggedIn){
             showIncomingAppointments();
+            utilLog.append(schedulingService.getUserLoggedIn());
             utilUI.openUI(actionEvent, UtilUI.UIEnum.CONTROL_PANEL_UI);
         } else {
             messageLabel.setText(utilMessages.getMessageByKey("login.problem"));
