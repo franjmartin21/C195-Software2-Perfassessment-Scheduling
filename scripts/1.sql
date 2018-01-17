@@ -19,8 +19,6 @@ CREATE TABLE User(
   PRIMARY KEY(userId)
 );
 
-insert into User (userName, password, active, createdBy, createDate, lastUpdate, lastUpdateBy)
-    values('user', 'user', 1, null, sysdate(), sysdate(), null);
 
 CREATE TABLE Country(
   countryId int AUTO_INCREMENT,

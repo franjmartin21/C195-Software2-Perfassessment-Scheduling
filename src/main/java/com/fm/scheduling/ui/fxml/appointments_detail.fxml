@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import tornadofx.control.DateTimePicker?>
+<GridPane hgap="0.0" prefHeight="710.9999068115285" prefWidth="679.9998779296875" styleClass="grid" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.fm.scheduling.ui.appointment.AppointmentDetailController">
+  <children>
+    <Label fx:id="operationLbl" prefHeight="22.000099999997474" prefWidth="175.0" styleClass="section-label" text="Add Appointment" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Label text="Location" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <Label text="Contact" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+    <Label fx:id="variableFieldLbl" text="Title" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <TextField fx:id="titleTxt" prefHeight="45.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="2" />
+    <Button alignment="CENTER_LEFT" contentDisplay="LEFT" mnemonicParsing="false" onAction="#handleCancelAction" prefHeight="31.0" prefWidth="105.0" text="Cancel" textAlignment="LEFT" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+    <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleSaveAction" prefHeight="31.0" prefWidth="105.0" text="Save" textAlignment="LEFT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+    <Label text="Description" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+    <TextField fx:id="idTxt" disable="false" editable="false" focusTraversable="false" prefHeight="45.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.columnSpan="1" GridPane.rowIndex="1" />
+    <Label alignment="CENTER_RIGHT" contentDisplay="LEFT" text="ID" textAlignment="LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Label alignment="CENTER_RIGHT" contentDisplay="LEFT" text="Start" textAlignment="LEFT" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label alignment="CENTER_RIGHT" contentDisplay="LEFT" text="End" textAlignment="LEFT" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+    <Label alignment="CENTER_RIGHT" contentDisplay="LEFT" text="Customer" textAlignment="LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <ComboBox fx:id="customerCmb" prefHeight="46.0" prefWidth="498.0" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="3" />
+    <TextField id="nameTxt" fx:id="contactTxt" prefHeight="45.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="7" />
+    <ComboBox id="descriptionTxt" fx:id="descriptionCmb" prefHeight="46.0" prefWidth="498.0" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="5" />
+    <ComboBox fx:id="locationCmb" prefHeight="46.0" prefWidth="498.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="6" />
+    <Label text="URL" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+    <TextField id="nameTxt" fx:id="urlTxt" prefHeight="45.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="8" />
+    <DateTimePicker fx:id="startDateTimePicker" prefWidth="160" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+    <DateTimePicker fx:id="endDateTimePicker" prefWidth="160" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="21.0" prefWidth="24.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="100.0" prefWidth="129.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="258.0" minWidth="100.0" prefWidth="217.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="40.0" prefWidth="130.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="100.0" prefWidth="203.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="20.0" prefWidth="65.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>

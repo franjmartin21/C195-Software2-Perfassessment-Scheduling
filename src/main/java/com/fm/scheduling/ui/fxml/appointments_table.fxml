@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="835.0" prefWidth="1042.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.fm.scheduling.ui.appointment.AppointmentTableController" >
+  <children>
+    <VBox layoutX="0.0" layoutY="0.0" prefHeight="835.0" prefWidth="1042.0">
+      <children>
+        <HBox prefHeight="100.0" prefWidth="200.0" spacing="20">
+          <children>
+            <Label styleClass="mainLbl" prefHeight="34.0" prefWidth="188.0" text="Appointments" />
+            <Button styleClass="changeCalendarBtn" mnemonicParsing="false" text="&lt;&lt;" onAction="#handlePreviousPeriod" />
+            <Button styleClass="changeCalendarBtn" mnemonicParsing="false" text="&gt;&gt;" onAction="#handleNextPeriod" />
+            <ComboBox fx:id="calendarTypeCmb" onAction="#handleCalendarTypeChange" prefHeight="34.0" prefWidth="223.0" />
+          </children>
+        </HBox>
+        <VBox fx:id="mainPanel" prefHeight="616.0" prefWidth="1042.0" />
+        <HBox prefHeight="119.0" prefWidth="1042.0" spacing="20">
+          <children>
+            <Button mnemonicParsing="false" onAction="#handleReturnControlPanel" styleClass="returnMenuButton" text="Return To Menu" />
+            <Button fx:id="addAppointmentBtn" mnemonicParsing="false" styleClass="actionButton" text="Add Appointment"/>
+          </children>
+        </HBox>
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

@@ -50,6 +50,12 @@ public class CustomerDetailController implements Initializable {
     private TextField address2Txt;
 
     @FXML
+    private TextField phoneTxt;
+
+    @FXML
+    private TextField postalCodeTxt;
+
+    @FXML
     private ComboBox<City> cityCmb;
 
     @FXML
@@ -121,6 +127,8 @@ public class CustomerDetailController implements Initializable {
         nameTxt.setText(customer.getCustomerName());
         address1Txt.setText(String.valueOf(customer.getAddress().getAddress()));
         address2Txt.setText(String.valueOf(customer.getAddress().getAddress2()));
+        postalCodeTxt.setText(String.valueOf(customer.getAddress().getPostalCode()));
+        phoneTxt.setText(String.valueOf(customer.getAddress().getPhone()));
         countryCmb.getSelectionModel().select(customer.getAddress().getCity().getCountry());
         fillCityComboBox();
         cityCmb.getSelectionModel().select(customer.getAddress().getCity());
@@ -147,6 +155,10 @@ public class CustomerDetailController implements Initializable {
 
         if(cityCmb.getSelectionModel().getSelectedItem() == null) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.CITY_NOT_INFORMED);
 
+        if(postalCodeTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.POSTAL_CODE_NOT_INFORMED);
+
+        if(phoneTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.PHONE_NOT_INFORMED);
+
         if(!schedulingException.getSchedulingExceptionTypeEnumList().isEmpty()) throw schedulingException;
     }
 
@@ -159,6 +171,8 @@ public class CustomerDetailController implements Initializable {
         Address address = new Address();
         address.setAddress(address1Txt.getText());
         address.setAddress2(address2Txt.getText());
+        address.setPhone(phoneTxt.getText());
+        address.setPostalCode(postalCodeTxt.getText());
         address.setCityId(cityCmb.getSelectionModel().getSelectedItem().getCityId());
         customer.setAddress(address);
         return customer;

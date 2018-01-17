@@ -14,26 +14,26 @@ public class CountryDao extends BaseDao<Country> {
             " SELECT    countryId," +
             "           country," +
             COMMON_COLUMS_QUERY +
-            " FROM      Country";
+            " FROM      country";
 
     private static final String GET_BY_ID_QUERY =" " +
                                     " SELECT    countryId," +
                                     "           country," +
                                                 COMMON_COLUMS_QUERY +
-                                    " FROM      Country" +
+                                    " FROM      country" +
                                     " WHERE     countryId = ?";
 
-    private static final String INSERT_QUERY = "INSERT INTO Country (country, " + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?," + COMMON_COLUMN_WILDCARDS + ")";
+    private static final String INSERT_QUERY = "INSERT INTO country (countryId, country, " + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE Country set country = ?," +
+            "UPDATE country set country = ?," +
                                  COMMON_COLUMNS_UPDATE +
             "WHERE countryId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM Country WHERE countryId = ?";
+            "DELETE FROM country WHERE countryId = ?";
 
     public CountryDao() {
         super(Country.class);
@@ -61,19 +61,16 @@ public class CountryDao extends BaseDao<Country> {
 
     @Override
     public int insert(Country country, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, country.getCountry());
-        ps.setString(2, user.getUserName() );
-        ps.setTimestamp(3, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, getNextId());
+        ps.setString(2, country.getCountry());
+        ps.setString(3, user.getUserName() );
         ps.setTimestamp(4, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(5, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(5, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(6, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }

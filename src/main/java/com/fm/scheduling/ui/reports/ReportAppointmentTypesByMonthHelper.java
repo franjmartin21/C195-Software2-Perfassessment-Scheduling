@@ -47,7 +47,7 @@ public class ReportAppointmentTypesByMonthHelper extends ReportHelper {
         if(filter == null) return null;
 
         Map<String, String> mapAppointmentsByType = schedulingService.getAppointmentsGroupedByDescriptionByMonth(stringLocalDateMap.get(filter));
-        TableColumn<Map.Entry<String, String>, String> column1 = new TableColumn<>("Key");
+        TableColumn<Map.Entry<String, String>, String> column1 = new TableColumn<>("Appointment Type");
         column1.setPrefWidth(500);
         column1.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String,String>,String>, ObservableValue<String>>() {
 
@@ -59,7 +59,7 @@ public class ReportAppointmentTypesByMonthHelper extends ReportHelper {
             }
         });
 
-        TableColumn<Map.Entry<String, String>, String> column2 = new TableColumn<>("Value");
+        TableColumn<Map.Entry<String, String>, String> column2 = new TableColumn<>("Number Appointments");
         column2.setPrefWidth(400);
         column2.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Map.Entry<String, String>, String>, ObservableValue<String>>() {
 

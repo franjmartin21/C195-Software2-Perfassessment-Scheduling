@@ -15,7 +15,7 @@ public class CustomerDao extends BaseDao<Customer> {
             "           addressId," +
             "           active," +
             COMMON_COLUMS_QUERY +
-            " FROM      Customer";
+            " FROM      customer";
 
     private static final String GET_BY_ID_QUERY =" " +
                                     " SELECT    customerId," +
@@ -23,22 +23,22 @@ public class CustomerDao extends BaseDao<Customer> {
                                     "           addressId," +
                                     "           active," +
                                                 COMMON_COLUMS_QUERY +
-                                    " FROM      Customer" +
+                                    " FROM      customer" +
                                     " WHERE     customerId = ?";
 
-    private static final String INSERT_QUERY = "INSERT INTO Customer (customerName, addressId, active, " + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
+    private static final String INSERT_QUERY = "INSERT INTO customer (customerId, customerName, addressId, active, " + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE Customer set customerName = ?," +
+            "UPDATE customer set customerName = ?," +
             "                    addressId = ?," +
             "                    active = ?," +
                                  COMMON_COLUMNS_UPDATE +
             "where customerId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM Customer WHERE customerId = ?";
+            "DELETE FROM customer WHERE customerId = ?";
 
     public CustomerDao() {
         super(Customer.class);
@@ -66,21 +66,18 @@ public class CustomerDao extends BaseDao<Customer> {
 
     @Override
     public int insert(Customer customer, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, customer.getCustomerName());
-        ps.setInt(2, customer.getAddressId());
-        ps.setBoolean(3, customer.isActive());
-        ps.setString(4, user.getUserName() );
-        ps.setTimestamp(5, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, returnCode);
+        ps.setString(2, customer.getCustomerName());
+        ps.setInt(3, customer.getAddressId());
+        ps.setBoolean(4, customer.isActive());
+        ps.setString(5, user.getUserName() );
         ps.setTimestamp(6, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(7, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(7, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(8, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }

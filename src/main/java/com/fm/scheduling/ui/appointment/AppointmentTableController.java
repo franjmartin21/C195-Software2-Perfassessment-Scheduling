@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -47,6 +48,9 @@ public class AppointmentTableController implements Initializable{
     private AppointmentCalendarHelper appointmentCalendarHelper;
 
     @FXML
+    private Button addAppointmentBtn;
+
+    @FXML
     private ComboBox<CalendarTypeEnum> calendarTypeCmb;
 
     @FXML
@@ -55,6 +59,16 @@ public class AppointmentTableController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Adding event to addAppointmentBtn
+        addAppointmentBtn.setOnAction(event -> {
+            schedulingService.clearAppointmentSelected();
+            try {
+                utilUI.openUI(event, UtilUI.UIEnum.APPOINTMENTS_ADD_UI);
+            } catch(IOException e){
+                e.printStackTrace();
+            }
+        });
+
         ObservableList<CalendarTypeEnum> observableCountry = calendarTypeCmb.getItems();
         //countryCmb.setConverter(new CustomerDetailController.CountryConverter());
         observableCountry.addAll(CalendarTypeEnum.values());
@@ -92,10 +106,5 @@ public class AppointmentTableController implements Initializable{
 
     public void handleReturnControlPanel(ActionEvent actionEvent) throws IOException {
         utilUI.openUI(actionEvent, UtilUI.UIEnum.CONTROL_PANEL_UI);
-    }
-
-    public void handleAddAppointment(ActionEvent actionEvent) throws IOException {
-        schedulingService.clearAppointmentSelected();
-        utilUI.openUI(actionEvent, UtilUI.UIEnum.APPOINTMENTS_ADD_UI);
     }
 }

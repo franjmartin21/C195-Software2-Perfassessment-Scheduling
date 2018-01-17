@@ -71,29 +71,23 @@ public abstract class AppointmentCalendarHelper {
         MenuItem edit = new MenuItem("Edit");
         MenuItem delete = new MenuItem("Delete");
         contextMenu.getItems().addAll(edit, delete);
-        edit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                AppointmentCalendarHelper.this.schedulingService.setAppointmentSelected(appointment);
-                try {
-                    utilUI.openUI(actionEvent, UtilUI.UIEnum.APPOINTMENTS_EDIT_UI, label.getScene());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        edit.setOnAction(actionEvent -> {
+            AppointmentCalendarHelper.this.schedulingService.setAppointmentSelected(appointment);
+            try {
+                utilUI.openUI(actionEvent, UtilUI.UIEnum.APPOINTMENTS_EDIT_UI, label.getScene());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    AppointmentCalendarHelper.this.schedulingService.deleteAppointment(appointment);
-                    utilUI.openUI(actionEvent, UtilUI.UIEnum.APPOINTMENTS_TABLE_UI, label.getScene());
-                } catch (SchedulingException e) {
-                    List<String> messages = utilMessages.getMessageListBySchedulingException(e);
-                    utilUI.openWarningDialog(messages);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        delete.setOnAction(actionEvent ->{
+        try {
+                AppointmentCalendarHelper.this.schedulingService.deleteAppointment(appointment);
+                utilUI.openUI(actionEvent, UtilUI.UIEnum.APPOINTMENTS_TABLE_UI, label.getScene());
+            } catch (SchedulingException e) {
+                List<String> messages = utilMessages.getMessageListBySchedulingException(e);
+                utilUI.openWarningDialog(messages);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         return contextMenu;

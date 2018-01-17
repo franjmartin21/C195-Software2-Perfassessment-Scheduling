@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.fm.scheduling.ui.controlpanel.ControlPanelController">
+  <children>
+    <VBox layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="600.0">
+      <children>
+        <Label prefHeight="87.00009999999747" prefWidth="600.0" styleClass="menuLbl" text="CONTROL PANEL" />
+        <Button fx:id="customerBtn" mnemonicParsing="false" prefHeight="106.0" prefWidth="600.0" styleClass="menuBtn" onAction="#handleGoCustomerPanel" text="Customers" />
+        <Button fx:id="appointmentsBtn" mnemonicParsing="false" prefHeight="106.0" prefWidth="600.0" styleClass="menuBtn" onAction="#handleGoAppointmentsPanel" text="Appointments" />
+        <Button fx:id="reportsBtn" mnemonicParsing="false" prefHeight="106.0" prefWidth="600.0" styleClass="menuBtn" onAction="#handleGoReportsPanel" text="Reports" />
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>

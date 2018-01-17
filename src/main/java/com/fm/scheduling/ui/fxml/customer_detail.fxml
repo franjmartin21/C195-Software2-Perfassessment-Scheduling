@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane hgap="0.0" prefHeight="647.0" prefWidth="600.0" styleClass="grid" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.fm.scheduling.ui.customer.CustomerDetailController">
+  <children>
+    <Label fx:id="operationLbl" prefHeight="22.000099999997474" prefWidth="175.0" styleClass="section-label" text="Add Customer" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Label alignment="CENTER_RIGHT" contentDisplay="LEFT" text="ID" textAlignment="LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Label text="Name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <Label prefWidth="64.9998779296875" text="Address 1" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Label text="Address 2" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label fx:id="variableFieldLbl" text="Country" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+    <Label text="City" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+    <TextField fx:id="idTxt" disable="false" editable="false" focusTraversable="false" prefHeight="44.999900000002526" prefWidth="344.0" GridPane.columnIndex="2" GridPane.columnSpan="1" GridPane.rowIndex="1" />
+    <TextField fx:id="nameTxt" prefHeight="45.0" prefWidth="348.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+    <Button alignment="CENTER_LEFT" mnemonicParsing="false" onAction="#handleSaveAction" prefHeight="31.0" prefWidth="105.0" text="Save" textAlignment="LEFT" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" />
+    <Button alignment="CENTER_LEFT" contentDisplay="LEFT" mnemonicParsing="false" onAction="#handleCancelAction" prefHeight="31.0" prefWidth="105.0" text="Cancel" textAlignment="LEFT" GridPane.columnIndex="3" GridPane.rowIndex="9" />
+    <TextField fx:id="address1Txt" prefHeight="45.0" prefWidth="348.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+    <TextField fx:id="address2Txt" prefHeight="45.0" prefWidth="348.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+    <ComboBox fx:id="countryCmb" minHeight="16.0" onAction="#handleCountryCmbOnChange" prefHeight="38.0" prefWidth="348.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="7" />
+    <ComboBox fx:id="cityCmb" minHeight="16.0" prefHeight="38.0" prefWidth="348.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+    <Label prefWidth="122.0" text="Postal Code" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <TextField id="idTxt" fx:id="postalCodeTxt" focusTraversable="false" prefHeight="44.999900000002526" prefWidth="344.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+    <Label text="Phone" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+    <TextField fx:id="phoneTxt" focusTraversable="false" prefHeight="44.999900000002526" prefWidth="344.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+  </children>
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="21.0" prefWidth="21.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="100.0" prefWidth="158.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="201.0" minWidth="100.0" prefWidth="176.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.0" minWidth="100.0" prefWidth="150.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="40.0" prefWidth="40.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="77.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="84.0" minHeight="10.0" prefHeight="81.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="85.0" minHeight="10.0" prefHeight="85.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+</GridPane>

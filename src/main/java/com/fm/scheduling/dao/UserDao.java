@@ -13,16 +13,23 @@ public class UserDao extends BaseDao<User> {
             "           userName," +
             "           password," +
             "           active," +
+            "           createBy," +
+            "           createDate," +
+            "           lastUpdate," +
+            "           lastUpdatedBy" +
             COMMON_COLUMS_QUERY +
-            " FROM      User";
+            " FROM      user";
 
     private static final String GET_BY_ID_QUERY =" " +
             "SELECT     userId," +
             "           userName," +
             "           password," +
             "           active," +
-                        COMMON_COLUMS_QUERY +
-            " FROM      User" +
+            "           createBy," +
+            "           createDate," +
+            "           lastUpdate," +
+            "           lastUpdatedBy" +
+            " FROM      user" +
             " WHERE     userId = ?";
 
     private static final String GET_BY_NAME_QUERY =" " +
@@ -30,25 +37,31 @@ public class UserDao extends BaseDao<User> {
             "           userName," +
             "           password," +
             "           active," +
-            COMMON_COLUMS_QUERY +
-            " FROM      User" +
+            "           createBy," +
+            "           createDate," +
+            "           lastUpdate," +
+            "           lastUpdatedBy" +
+            " FROM      user" +
             " WHERE     userName = ?";
 
 
     private static final String INSERT_QUERY = "" +
-            "INSERT INTO User (userName, password, active," + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
+            "INSERT INTO user (userId, userName, password, active," + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE User set UserName = ?," +
+            "UPDATE user set UserName = ?," +
             "            password = ?," +
             "            active = ?," +
-                         COMMON_COLUMNS_UPDATE +
+            "            createBy = ?," +
+            "            createDate = ?," +
+            "            lastUpdate = ?," +
+            "            lastUpdatedBy = ?" +
             "WHERE userId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM User WHERE userId = ?";
+            "DELETE FROM user WHERE userId = ?";
 
 
     public UserDao(){
@@ -87,21 +100,18 @@ public class UserDao extends BaseDao<User> {
 
     @Override
     public int insert(User object, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, object.getUserName());
-        ps.setString(2, object.getPassword());
-        ps.setBoolean(3, object.isActive());
-        ps.setString(4, user.getUserName() );
-        ps.setTimestamp(5, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, returnCode);
+        ps.setString(2, object.getUserName());
+        ps.setString(3, object.getPassword());
+        ps.setBoolean(4, object.isActive());
+        ps.setString(5, user.getUserName() );
         ps.setTimestamp(6, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(7, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(7, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(8, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }
@@ -157,7 +167,11 @@ public class UserDao extends BaseDao<User> {
 
         User user = null;
         while (rs.next()) {
-            user = super.mapResultSet(rs);
+            user = User.createInstance(User.class);
+            user.setCreateDate(rs.getTimestamp("createDate").toLocalDateTime());
+            user.setCreatedBy(rs.getString("createBy"));
+            user.setLastUpdate(rs.getTimestamp("lastUpdate").toLocalDateTime());
+            user.setLastUpdateBy(rs.getString("lastUpdatedBy"));
             user.setUserId(rs.getInt("userId"));
             user.setUserName(rs.getString("userName"));
             user.setPassword(rs.getString("password"));

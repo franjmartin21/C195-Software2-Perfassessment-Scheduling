@@ -19,6 +19,8 @@ public class SchedulingException extends Exception {
 
         CUSTOMER_NAME_NOT_INFORMED,
         ADDRESS_NOT_INFORMED,
+        POSTAL_CODE_NOT_INFORMED,
+        PHONE_NOT_INFORMED,
         CITY_NOT_INFORMED,
         COUNTRY_NOT_INFORMED,
         DB_CONNECTION_PROBLEM,

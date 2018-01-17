@@ -4,10 +4,7 @@ import com.fm.scheduling.domain.BaseRecord;
 import com.fm.scheduling.domain.User;
 import com.fm.scheduling.util.UtilMessages;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public abstract class BaseDao<E extends BaseRecord> {
@@ -37,7 +34,6 @@ public abstract class BaseDao<E extends BaseRecord> {
             "lastUpdate = ?," +
             "lastUpdateBy = ? ";
 
-
     public BaseDao(Class clazz){
         ResourceBundle resourceBundle = ResourceBundle.getBundle(CONFIG_FILE);
 
@@ -61,6 +57,19 @@ public abstract class BaseDao<E extends BaseRecord> {
         try{
             connection.close();
         } catch (Exception e){}
+    }
+
+    public int getNextId() throws SQLException{
+        int id = 0;
+        createConnectionDb();
+        String query = "SELECT MAX(" + clazz.getSimpleName().toLowerCase() + "Id) lastId from " + clazz.getSimpleName().toLowerCase();
+        PreparedStatement ps = connection.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            id = rs.getInt("lastId");
+        }
+        closeConnectionDb();
+        return (id + 1);
     }
 
     public abstract E getById(int i) throws SQLException;

@@ -15,7 +15,7 @@ public class CityDao extends BaseDao<City> {
                                     "           city, " +
                                     "           countryId," +
                                                 COMMON_COLUMS_QUERY +
-                                    " FROM      City" +
+                                    " FROM      city" +
                                     " WHERE     countryId = ?";
 
     private static final String GET_BY_ID_QUERY =" " +
@@ -23,21 +23,21 @@ public class CityDao extends BaseDao<City> {
                                     "           city," +
                                     "           countryId," +
                                                 COMMON_COLUMS_QUERY +
-                                    " FROM      City" +
+                                    " FROM      city" +
                                     " WHERE     cityId = ?";
 
-    private static final String INSERT_QUERY = "INSERT INTO City (city, countryId, " + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?,?," + COMMON_COLUMN_WILDCARDS + ")";
+    private static final String INSERT_QUERY = "INSERT INTO city (cityId, city, countryId, " + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE City set city = ?," +
+            "UPDATE city set city = ?," +
             "                countryId = ?," +
                                  COMMON_COLUMNS_UPDATE +
             "WHERE cityId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM City WHERE cityId = ?";
+            "DELETE FROM city WHERE cityId = ?";
 
     public CityDao() {
         super(City.class);
@@ -66,20 +66,17 @@ public class CityDao extends BaseDao<City> {
 
     @Override
     public int insert(City city, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, city.getCity());
-        ps.setInt(2, city.getCountryId() );
-        ps.setString(3, user.getUserName() );
-        ps.setTimestamp(4, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, returnCode);
+        ps.setString(2, city.getCity());
+        ps.setInt(3, city.getCountryId() );
+        ps.setString(4, user.getUserName() );
         ps.setTimestamp(5, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(6, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(6, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(7, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }

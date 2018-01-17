@@ -15,15 +15,15 @@ public class AddressDao extends BaseDao<Address> {
                                     "           postalCode," +
                                     "           phone," +
                                                 COMMON_COLUMS_QUERY +
-                                    " FROM      Address" +
+                                    " FROM      address" +
                                     " WHERE     addressId = ?";
 
-    private static final String INSERT_QUERY = "INSERT INTO Address(address, address2, cityId, postalCode, phone, " + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?,?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
+    private static final String INSERT_QUERY = "INSERT INTO address(addressId, address, address2, cityId, postalCode, phone, " + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?,?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE Address set address = ?," +
+            "UPDATE address set address = ?," +
             "                address2 = ?," +
             "                cityId = ?," +
             "                postalCode = ?," +
@@ -32,7 +32,7 @@ public class AddressDao extends BaseDao<Address> {
             "WHERE addressId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM Address WHERE addressId = ?";
+            "DELETE FROM address WHERE addressId = ?";
 
     public AddressDao(){
         super(Address.class);
@@ -51,23 +51,20 @@ public class AddressDao extends BaseDao<Address> {
 
     @Override
     public int insert(Address address, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, address.getAddress());
-        ps.setString(2, address.getAddress2() );
-        ps.setInt(3, address.getCityId() );
-        ps.setString(4, address.getPostalCode());
-        ps.setString(5, address.getPhone());
-        ps.setString(6, user.getUserName());
-        ps.setTimestamp(7, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, returnCode);
+        ps.setString(2, address.getAddress());
+        ps.setString(3, address.getAddress2() );
+        ps.setInt(4, address.getCityId() );
+        ps.setString(5, address.getPostalCode());
+        ps.setString(6, address.getPhone());
+        ps.setString(7, user.getUserName());
         ps.setTimestamp(8, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(9, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(9, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(10, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }

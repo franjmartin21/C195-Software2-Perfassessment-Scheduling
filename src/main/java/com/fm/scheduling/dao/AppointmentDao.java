@@ -29,47 +29,47 @@ public class AppointmentDao extends BaseDao<Appointment> {
     private static final String GET_BY_CUSTOMER =
             SELECT_ALL_FIELDS +
             COMMON_COLUMS_QUERY +
-            " FROM Appointment" +
+            " FROM appointment" +
             " WHERE customerId= ?";
 
     private static final String GET_BY_CONSULTANT =
             SELECT_ALL_FIELDS +
             COMMON_COLUMS_QUERY +
-            " FROM      Appointment" +
+            " FROM      appointment" +
             " WHERE     createdBy= ?" +
             " ORDER BY  start ";
 
     private static final String GET_BY_LOCATION =
             SELECT_ALL_FIELDS +
             COMMON_COLUMS_QUERY +
-            " FROM      Appointment" +
+            " FROM      appointment" +
             " WHERE     location= ?" +
             " ORDER BY  start ";
 
     private static final String GET_GROUPED_BY_DESCRIPTION_BY_DATE_RANGE = " " +
             " SELECT description, " +
             "        count(1) numAppointments " +
-            " FROM Appointment " +
+            " FROM appointment " +
             " WHERE start BETWEEN ? AND ? " +
             " GROUP BY description";
 
     private static final String GET_LIST_QUERY = " " +
             SELECT_ALL_FIELDS +
             COMMON_COLUMS_QUERY +
-            " FROM      Appointment" +
+            " FROM      appointment" +
             " ORDER BY  start";
 
     private static final String GET_BY_ID_QUERY =" " +
             SELECT_ALL_FIELDS +
             COMMON_COLUMS_QUERY +
-            " FROM      Appointment" +
+            " FROM      appointment" +
             " WHERE     appointmentId= ?";
 
-    private static final String INSERT_QUERY = "INSERT INTO Appointment (customerId, title, description, location, contact, url, start, end, " + COMMON_COLUMS_QUERY + ")" +
-            "VALUES(" + "?,?,?,?,?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
+    private static final String INSERT_QUERY = "INSERT INTO appointment (appointmentId, customerId, title, description, location, contact, url, start, end, " + COMMON_COLUMS_QUERY + ")" +
+            "VALUES(" + "?,?,?,?,?,?,?,?,?," + COMMON_COLUMN_WILDCARDS + ")";
 
     private static final String UPDATE_QUERY = "" +
-            "UPDATE Appointment set customerId = ?," +
+            "UPDATE appointment set customerId = ?," +
             "                       title = ?," +
             "                       description = ?," +
             "                       location = ?," +
@@ -81,7 +81,7 @@ public class AppointmentDao extends BaseDao<Appointment> {
             "where appointmentId = ?";
 
     private static final String DELETE_QUERY = "" +
-            "DELETE FROM Appointment WHERE appointmentId = ?";
+            "DELETE FROM appointment WHERE appointmentId = ?";
 
     public AppointmentDao() {
         super(Appointment.class);
@@ -155,26 +155,23 @@ public class AppointmentDao extends BaseDao<Appointment> {
 
     @Override
     public int insert(Appointment appointment, User user) throws SQLException {
-        int returnCode;
+        int returnCode = getNextId();
         super.createConnectionDb();
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, appointment.getCustomerId());
-        ps.setString(2, appointment.getTitle());
-        ps.setString(3, appointment.getDescription().name());
-        ps.setString(4, appointment.getLocation().name());
-        ps.setString(5, appointment.getContact());
-        ps.setString(6, appointment.getUrl());
-        ps.setTimestamp(7, Timestamp.valueOf(appointment.getStart()));
-        ps.setTimestamp(8, Timestamp.valueOf(appointment.getEnd()));
-        ps.setString(9, user.getUserName() );
-        ps.setTimestamp(10, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setInt(1, returnCode);
+        ps.setInt(2, appointment.getCustomerId());
+        ps.setString(3, appointment.getTitle());
+        ps.setString(4, appointment.getDescription().name());
+        ps.setString(5, appointment.getLocation().name());
+        ps.setString(6, appointment.getContact());
+        ps.setString(7, appointment.getUrl());
+        ps.setTimestamp(8, Timestamp.valueOf(appointment.getStart()));
+        ps.setTimestamp(9, Timestamp.valueOf(appointment.getEnd()));
+        ps.setString(10, user.getUserName() );
         ps.setTimestamp(11, Timestamp.valueOf(java.time.LocalDateTime.now()));
-        ps.setString(12, user.getUserName());
-        returnCode = ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()){
-            returnCode=rs.getInt(1);
-        }
+        ps.setTimestamp(12, Timestamp.valueOf(java.time.LocalDateTime.now()));
+        ps.setString(13, user.getUserName());
+        ps.executeUpdate();
         super.closeConnectionDb();
         return returnCode;
     }
