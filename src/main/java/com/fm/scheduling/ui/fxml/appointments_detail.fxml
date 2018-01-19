@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import tornadofx.control.DateTimePicker?>
 <GridPane hgap="0.0" prefHeight="710.9999068115285" prefWidth="679.9998779296875" styleClass="grid" vgap="0.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.fm.scheduling.ui.appointment.AppointmentDetailController">
   <children>
     <Label fx:id="operationLbl" prefHeight="22.000099999997474" prefWidth="175.0" styleClass="section-label" text="Add Appointment" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="0" />
@@ -24,8 +23,18 @@
     <ComboBox fx:id="locationCmb" prefHeight="46.0" prefWidth="498.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="6" />
     <Label text="URL" GridPane.columnIndex="1" GridPane.rowIndex="8" />
     <TextField id="nameTxt" fx:id="urlTxt" prefHeight="45.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="8" />
-    <DateTimePicker fx:id="startDateTimePicker" prefWidth="160" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-    <DateTimePicker fx:id="endDateTimePicker" prefWidth="160" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+    <HBox GridPane.columnIndex="2" GridPane.rowIndex="4" spacing="10">
+      <children>
+        <TextField fx:id="startDateTxt" prefWidth="100" maxWidth="100" promptText="MM/DD/YYYY"/>
+        <TextField fx:id="startTimeTxt" prefWidth="70" maxWidth="70" promptText="HH:MM"/>
+      </children>
+    </HBox>
+    <HBox GridPane.columnIndex="4" GridPane.rowIndex="4" spacing="10">
+      <children>
+        <TextField fx:id="endDateTxt" prefWidth="100" maxWidth="100" promptText="MM/DD/YYYY"/>
+        <TextField fx:id="endTimeTxt" prefWidth="70" maxWidth="70" promptText="HH:MM"/>
+      </children>
+    </HBox>
   </children>
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.0" minWidth="21.0" prefWidth="24.0" />

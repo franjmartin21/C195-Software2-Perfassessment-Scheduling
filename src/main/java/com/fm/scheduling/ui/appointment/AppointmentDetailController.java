@@ -1,11 +1,9 @@
 package com.fm.scheduling.ui.appointment;
 
-import com.fm.scheduling.domain.Address;
 import com.fm.scheduling.domain.Appointment;
 import com.fm.scheduling.domain.Customer;
 import com.fm.scheduling.exception.SchedulingException;
 import com.fm.scheduling.service.SchedulingService;
-import com.fm.scheduling.ui.customer.CustomerDetailController;
 import com.fm.scheduling.ui.util.UtilUI;
 import com.fm.scheduling.util.UtilMessages;
 import javafx.collections.ObservableList;
@@ -16,10 +14,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
-import tornadofx.control.DateTimePicker;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,10 @@ public class AppointmentDetailController implements Initializable{
             return labelTxt;
         }
     }
+
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("HH:mm");
 
     private final String CANCEL_DIALOG_KEY = "dialog.appointment.CANCEL_BUTTON_CONFIRMATION";
 
@@ -70,11 +76,18 @@ public class AppointmentDetailController implements Initializable{
     @FXML
     private TextField urlTxt;
 
-    @FXML
-    private DateTimePicker startDateTimePicker;
 
     @FXML
-    private DateTimePicker endDateTimePicker;
+    private TextField startDateTxt;
+
+    @FXML
+    private TextField startTimeTxt;
+
+    @FXML
+    private TextField endDateTxt;
+
+    @FXML
+    private TextField endTimeTxt;
 
     private OperationEnum operation;
 
@@ -118,8 +131,10 @@ public class AppointmentDetailController implements Initializable{
         locationCmb.getSelectionModel().select(appointment.getLocation());
         contactTxt.setText(appointment.getContact());
         urlTxt.setText(appointment.getUrl());
-        startDateTimePicker.setDateTimeValue(appointment.getStart());
-        endDateTimePicker.setDateTimeValue(appointment.getEnd());
+        startDateTxt.setText(DATE_FORMAT.format(appointment.getStart()));
+        startTimeTxt.setText(TIME_FORMAT.format(appointment.getStart()));
+        endDateTxt.setText(DATE_FORMAT.format(appointment.getEnd()));
+        endTimeTxt.setText(TIME_FORMAT.format(appointment.getEnd()));
     }
 
     private void fillComboBoxes() throws SchedulingException{
@@ -136,7 +151,7 @@ public class AppointmentDetailController implements Initializable{
         observableLocation.addAll(Appointment.LocationEnum.values());
     }
 
-    private Appointment getAppointmentFromFields(){
+    private Appointment getAppointmentFromFields() throws SchedulingException{
         Appointment appointment= new Appointment();
         if(idTxt.getText()  != null && !idTxt.getText().equals(""))
             appointment.setAppointmentId(Integer.valueOf(idTxt.getText()));
@@ -146,12 +161,22 @@ public class AppointmentDetailController implements Initializable{
         appointment.setLocation(locationCmb.getSelectionModel().getSelectedItem());
         appointment.setContact(contactTxt.getText());
         appointment.setUrl(urlTxt.getText());
-        appointment.setStart(startDateTimePicker.getDateTimeValue());
-        appointment.setEnd(endDateTimePicker.getDateTimeValue());
+        LocalDate startDate = LocalDate.parse(startDateTxt.getText(), DATE_FORMAT);
+        LocalTime startTime = LocalTime.parse(startTimeTxt.getText(), TIME_FORMAT);
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+        LocalDate endDate = LocalDate.parse(endDateTxt.getText(), DATE_FORMAT);
+        LocalTime endTime = LocalTime.parse(endTimeTxt.getText(), TIME_FORMAT);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, endTime);
+        if(endDateTime.isBefore(startDateTime)) throw new SchedulingException(SchedulingException.SchedulingExceptionTypeEnum.START_END_DATE_APPOINTMENT_INCORRECT);
+
+        if(endDateTime.isAfter(startDateTime.plusHours(Appointment.MAX_HOURS_LENGHT_APPOINTMENT))) throw new SchedulingException(SchedulingException.SchedulingExceptionTypeEnum.APPOINTMENT_TOO_LONG);
+
+        appointment.setStart(startDateTime);
+        appointment.setEnd(endDateTime);
         return appointment;
     }
 
-    private void validateCustomer() throws SchedulingException {
+    private void validateAppointment() throws SchedulingException {
         SchedulingException schedulingException = new SchedulingException();
         if(titleTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.TITLE_APPOINTMENT_NOT_INFORMED);
 
@@ -165,19 +190,47 @@ public class AppointmentDetailController implements Initializable{
 
         if(urlTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.URL_APPOINTMENT_NOT_INFORMED);
 
-        if(startDateTimePicker.getValue() == null) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_APPOINTMENT_NOT_INFORMED);
+        if(startDateTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_APPOINTMENT_DATE_NOT_INFORMED);
 
-        if(endDateTimePicker.getValue() == null) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.END_APPOINTMENT_NOT_INFORMED);
+        if(!checkValidDateStr(startDateTxt.getText())) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_APPOINTMENT_DATE_INVALID);
 
-        if(endDateTimePicker.getDateTimeValue().isBefore(startDateTimePicker.getDateTimeValue())) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_END_DATE_APPOINTMENT_INCORRECT);
+        if(startTimeTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_APPOINTMENT_TIME_NOT_INFORMED);
 
-        if(endDateTimePicker.getDateTimeValue().isAfter(startDateTimePicker.getDateTimeValue().plusHours(Appointment.MAX_HOURS_LENGHT_APPOINTMENT))) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.APPOINTMENT_TOO_LONG);
+        if(!checkValidTimeStr(startTimeTxt.getText())) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.START_APPOINTMENT_TIME_NOT_INVALID);
+
+        if(endDateTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.END_APPOINTMENT_DATE_NOT_INFORMED);
+
+        if(!checkValidDateStr(endDateTxt.getText())) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.END_APPOINTMENT_DATE_INVALID);
+
+        if(endTimeTxt.getText().equals("")) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.END_APPOINTMENT_TIME_NOT_INFORMED);
+
+        if(!checkValidTimeStr(endTimeTxt.getText())) schedulingException.addSchedulingExceptionType(SchedulingException.SchedulingExceptionTypeEnum.END_APPOINTMENT_TIME_NOT_INVALID);
 
         if(!schedulingException.getSchedulingExceptionTypeEnumList().isEmpty()) throw schedulingException;
     }
 
+    private boolean checkValidDateStr(String date){
+        boolean valid = true;
+        try {
+            LocalDate.parse(date, DATE_FORMAT);
+        } catch(DateTimeParseException ex){
+            valid = false;
+        }
+        return valid;
+    }
+
+    private boolean checkValidTimeStr(String time){
+        boolean valid = true;
+        try {
+            LocalTime.parse(time, TIME_FORMAT);
+        } catch(DateTimeParseException ex){
+            valid = false;
+        }
+        return valid;
+    }
+
     private void storeFields(ActionEvent actionEvent) throws IOException, SchedulingException{
-        validateCustomer();
+        validateAppointment();
         Appointment newAppointment = getAppointmentFromFields();
         if (operation == OperationEnum.ADD) {
             schedulingService.storeAppointment(newAppointment);

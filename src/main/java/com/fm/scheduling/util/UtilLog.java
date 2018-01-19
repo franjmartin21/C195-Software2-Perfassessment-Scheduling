@@ -26,7 +26,7 @@ public class UtilLog {
     }
 
     public void append(User user) throws IOException{
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
         bw.write(dateTimeFormatter.format(LocalDateTime.now()) + " - Logged in user:"  + user.getUserName());
         bw.newLine();
         bw.close();
