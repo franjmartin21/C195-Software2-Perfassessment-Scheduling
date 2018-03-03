@@ -17,7 +17,6 @@ public class UserDao extends BaseDao<User> {
             "           createDate," +
             "           lastUpdate," +
             "           lastUpdatedBy" +
-            COMMON_COLUMS_QUERY +
             " FROM      user";
 
     private static final String GET_BY_ID_QUERY =" " +
@@ -149,9 +148,12 @@ public class UserDao extends BaseDao<User> {
         if(rs == null) return null;
 
         List<User> userList = new ArrayList<>();
-        User user = null;
+        User user = new User();
         while (rs.next()) {
-            user = super.mapResultSet(rs);
+            user.setCreateDate(rs.getTimestamp("createDate").toLocalDateTime());
+            user.setCreatedBy(rs.getString("createBy"));
+            user.setLastUpdate(rs.getTimestamp("lastUpdate").toLocalDateTime());
+            user.setLastUpdateBy(rs.getString("lastUpdatedBy"));
             user.setUserId(rs.getInt("userId"));
             user.setUserName(rs.getString("userName"));
             user.setPassword(rs.getString("password"));
